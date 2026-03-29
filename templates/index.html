@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>רביעיות - סייבר ופינטק</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div id="lobby-screen" class="screen active">
+        <div class="lobby-box">
+            <h1>🃏 משחק רביעיות רשת</h1>
+            <p>הזן פרטים כדי להצטרף או ליצור חדר משחק</p>
+            
+            <input type="text" id="room-id" placeholder="שם החדר (למשל: room1)">
+            <input type="text" id="player-name" placeholder="השם שלך">
+            
+            <select id="theme-select">
+                <option value="cyber">🛡️ סייבר (מפת הסייבר)</option>
+                <option value="fintech">💸 פינטק (מושגי ליבה)</option>
+            </select>
+            
+            <button onclick="joinRoom()">היכנס לחדר</button>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen">
+        <div class="header">
+            <h2>חדר: <span id="display-room"></span> | שחקן: <span id="display-name"></span></h2>
+            <button id="start-btn" onclick="startGame()">🚀 התחל משחק</button>
+        </div>
+
+        <div class="game-container">
+            <div class="sidebar">
+                <h3>👥 שחקנים אחרים</h3>
+                <div id="opponents-area"></div>
+
+                <div class="log-container">
+                    <h3>📜 יומן אירועים</h3>
+                    <div id="game-log"></div>
+                </div>
+            </div>
+
+            <div class="main-area">
+                <div class="my-status">
+                    <h3>סטטוס תור: <span id="turn-status" class="highlight">ממתין לתחילת משחק...</span></h3>
+                    <p>רביעיות שהשלמתי: <span id="my-score">0</span></p>
+                </div>
+
+                <div class="action-box">
+                    <h3>בקש קלף משחקן אחר</h3>
+                    <div class="ask-controls">
+                        <select id="ask-target">
+                            <option value="">-- ממי לבקש? --</option>
+                        </select>
+                        
+                        <select id="ask-series" onchange="updateCardDropdown()">
+                            <option value="">-- איזו סדרה? --</option>
+                        </select>
+                        
+                        <select id="ask-card">
+                            <option value="">-- איזה קלף? --</option>
+                        </select>
+                        
+                        <button id="btn-ask" onclick="askForCard()" disabled>לא התור שלך</button>
+                    </div>
+                </div>
+
+                <h3>הקלפים שלי:</h3>
+                <div id="my-cards" class="cards-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

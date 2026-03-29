@@ -52,7 +52,8 @@ function joinRoom() {
             addLog(`שגיאה: ${data.message}`, "error");
             alert(data.message);
         } else if (data.type === "game_state") {
-            renderGameState(data.data);
+            // תוקן: שולחים את data ישירות, כי השרת לא עוטף את זה בעוד data
+            renderGameState(data);
         }
     };
 
@@ -63,7 +64,8 @@ function joinRoom() {
 
 function startGame() {
     if(ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ action: "start_game" }));
+        // תוקן: שונה מ-action ל-type
+        ws.send(JSON.stringify({ type: "start_game" }));
     }
 }
 
@@ -194,10 +196,11 @@ function askForCard() {
         return;
     }
 
+    // תוקן: שמות המפתחות הותאמו בדיוק למה ש-main.py קורא
     ws.send(JSON.stringify({
-        action: "ask_card",
-        target_id: targetId,
-        series_name: seriesName,
+        type: "ask_card",
+        target: targetId,
+        series: seriesName,
         card_id: cardId
     }));
     

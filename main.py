@@ -5,7 +5,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 import json
 from game_logic import QuartetsGame
-from decks import CYBER_DECK, FINTECH_DECK
+# שינוי חזרה לייבוא מקובץ terms כפי שמופיע אצלך בתיקייה
+from terms import CYBER_DECK, FINTECH_DECK
 
 app = FastAPI()
 
@@ -13,7 +14,6 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# --- הוספת הנתיב החסר שגרם לשגיאה ---
 @app.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})

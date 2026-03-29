@@ -39,9 +39,11 @@ async def broadcast_game_state(room_id: str):
             if p_id in room_websockets.get(room_id, {}):
                 del room_websockets[room_id][p_id]
 
-@app.get("/")
+# --- התיקון הקריטי ל-Render ולגרסאות החדשות של FastAPI ---
+@app.api_route("/", methods=["GET", "HEAD"])
 async def get_index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    # ציון מפורש של שמות הפרמטרים פותר את בעיית ה-tuple as dict key
+    return templates.TemplateResponse(request=request, name="index.html")
 
 @app.websocket("/ws/{room_id}/{player_name}/{theme}")
 async def websocket_endpoint(websocket: WebSocket, room_id: str, player_name: str, theme: str):
@@ -81,8 +83,8 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str, player_name: st
                 print(f"התקבל מידע שאינו JSON תקין מהשחקן {player_name}. מתעלם...")
                 continue # מדלגים על הודעה פגומה, השרת ממשיך לרוץ
             
-            # פתרון ה-KeyError: שימוש ב-get שולף את הערך בבטחה, ומחזיר None אם הוא לא קיים
-            msg_type = message.get("type")
+            # התיקון המקורי ל- KeyError
+            msg_type = message.get("type") or message.get("action")
             
             if not msg_type:
                 print(f"אזהרה: התקבלה הודעה ללא שדה 'type' בחדר {room_id}: {message}")
@@ -96,8 +98,8 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str, player_name: st
             elif msg_type == "ask_card":
                 game.process_request(
                     player_name, 
-                    message.get("target"), 
-                    message.get("series"), 
+                    message.get("target") or message.get("target_id"), 
+                    message.get("series") or message.get("series_name"), 
                     message.get("card_id")
                 )
             else:

@@ -5,10 +5,14 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 import json
 from game_logic import QuartetsGame
-# שינוי חזרה לייבוא מקובץ terms כפי שמופיע אצלך בתיקייה
-from terms import CYBER_DECK, FINTECH_DECK
+
+# הייבוא המדויק לפי הקבצים והמשתנים שלך:
+from terms import QUARTETS_DATA as FINTECH_DECK
+from terms2 import CYBER_QUARTETS_DATA as CYBER_DECK
 
 app = FastAPI()
+# ... שאר הקוד נשאר ללא שינוי ...
+
 
 # הגדרת נתיבים לקבצים סטטיים ותבניות
 app.mount("/static", StaticFiles(directory="static"), name="static")
